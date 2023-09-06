@@ -1,0 +1,83 @@
+{
+  "name": "version-wizard",
+  "displayName": "Version Wizard",
+  "description": "",
+  "version": "0.0.1",
+  "author": "til0r",
+  "engines": {
+    "vscode": "^1.81.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "vw",
+          "title": "Version Wizard",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "vw",
+          "name": "Version Wizard"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "vw.command",
+        "title": "Run Script",
+        "icon": "$(run)"
+      },
+      {
+        "command": "vw.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "vw.refresh",
+          "when": "view == vw",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "vw.command",
+          "when": "view == vw",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.81.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.47.0",
+    "glob": "^10.3.3",
+    "mocha": "^10.2.0",
+    "typescript": "^5.1.6",
+    "@vscode/test-electron": "^2.3.4"
+  },
+  "homepage": "https://github.com/Til0r/version-wizard/blob/master/README.md"
+}

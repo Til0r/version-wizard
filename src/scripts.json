@@ -1,0 +1,21 @@
+{
+    "scripts": {
+        "version:patch": "npm version patch --no-git-tag-version",
+        "version:minor": "npm version minor --no-git-tag-version",
+        "version:major": "npm version major --no-git-tag-version",
+        "version:prerelease": "npm version prerelease --preid=rc --no-git-tag-version",
+        "tag": "git tag v$env${npm_package_version} && git push origin v$env${npm_package_version} && git push",
+        "prod": "npm run build-prod && git add . && git commit -am 'New release prod'",
+        "stage": "npm run build-stage && git add . && git commit -am 'New release stage'",
+        "stage:tag": "npm run stage && npm run tag",
+        "release:patch:stage": "npm run version:patch && npm run stage:tag",
+        "release:minor:stage": "npm run version:minor && npm run stage:tag",
+        "release:major:stage": "npm run version:major && npm run stage:tag",
+        "release:prerelease:stage": "npm run version:prerelease && npm run stage:tag",
+        "prod:tag": "npm run prod && npm run tag",
+        "release:patch:prod": "npm run version:patch && npm run prod:tag",
+        "release:minor:prod": "npm run version:minor && npm run prod:tag",
+        "release:major:prod": "npm run version:major && npm run prod:tag",
+        "release:prerelease:prod": "npm run version:prerelease && npm run prod:tag"
+    }
+}
