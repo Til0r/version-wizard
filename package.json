@@ -3,7 +3,7 @@
   "displayName": "Version Wizard",
   "description": "",
   "version": "0.0.1",
-  "author": "til0r",
+  "publisher": "til0r",
   "engines": {
     "vscode": "^1.81.0"
   },
@@ -18,7 +18,7 @@
         {
           "id": "vw",
           "title": "Version Wizard",
-          "icon": "${versions}"
+          "icon": "resources/icon.svg"
         }
       ]
     },
@@ -53,7 +53,7 @@
       "view/item/context": [
         {
           "command": "vw.command",
-          "when": "view == vw",
+          "when": "view == vw && viewItem == vWTreeItem",
           "group": "inline"
         }
       ]

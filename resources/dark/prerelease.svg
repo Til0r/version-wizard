@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-prerelease">
+      <rect width="24" height="24"/>
+    </clipPath>
+  </defs>
+  <g id="prerelease" clip-path="url(#clip-prerelease)">
+    <text id="_-rc_" data-name="-rc+" transform="translate(2 16)" fill="#fff" font-size="11" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">-rc</tspan><tspan y="0" fill="#22eb5d">+</tspan></text>
+  </g>
+</svg>

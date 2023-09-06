@@ -8,10 +8,11 @@ import {
 import { VWQuickPickItem } from "./vw-quick-pick";
 import path = require("path");
 
-export function vwQuickPick() {
+export function vWQuickPick(workspaceRoot: string) {
   return function ({ task, cwd }: any) {
     const runScripts = function (scriptBuild = "") {
       const name: string = `${path.basename(cwd)} ~ ${task}`;
+
       let terminal: Terminal;
 
       const terminalAlreadyCreated = window.terminals.find(
@@ -33,7 +34,7 @@ export function vwQuickPick() {
       );
 
       setTimeout(() => {
-        getDataFromPackageJson(cwd).then((packageJson: any) => {
+        getDataFromPackageJson(workspaceRoot).then((packageJson: any) => {
           const version = packageJson["version"];
 
           if (scriptBuild)
@@ -54,13 +55,14 @@ export function vwQuickPick() {
       }, 1000);
     };
 
-    quickPick(
-      "Execute also a build?",
+    console.log("task:", task);
+    generateQuickPick(
+      `Version Wizard (${task}): Execute also a build?`,
       [new VWQuickPickItem("Yes", ""), new VWQuickPickItem("No", "")],
       (selectedOption: VWQuickPickItem) => {
         switch (selectedOption.label) {
           case "Yes":
-            getDataFromPackageJson(cwd).then((packageJson: any) => {
+            getDataFromPackageJson(workspaceRoot).then((packageJson: any) => {
               if (packageJson) {
                 const scriptForBuildFounded = Object.keys(
                   packageJson.scripts as Object
@@ -73,11 +75,11 @@ export function vwQuickPick() {
                   .filter(Boolean) as VWQuickPickItem[];
 
                 if (scriptForBuildFounded.length)
-                  quickPick(
-                    "Choose the script for build:",
+                  generateQuickPick(
+                    "Version Wizard: Choose the script for build:",
                     scriptForBuildFounded,
                     (selectedOption: VWQuickPickItem) => {
-                      if (selectedOption) runScripts(selectedOption.label);
+                      runScripts(selectedOption.label);
                     }
                   );
               }
@@ -94,7 +96,7 @@ export function vwQuickPick() {
   };
 }
 
-function quickPick(
+function generateQuickPick(
   title: string,
   vWQuickPickItem: VWQuickPickItem[],
   action: Function

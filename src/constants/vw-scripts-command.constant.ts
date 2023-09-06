@@ -21,7 +21,7 @@ export function getPackageManager() {
   const rootPath: string = workspace.rootPath || ".";
 
   if (existsSync(path.join(rootPath, "pnpm-lock.yaml"))) return "pnpm";
-  if (existsSync(path.join(rootPath, "yarn-lock.json"))) return "yarn";
+  if (existsSync(path.join(rootPath, "yarn.lock"))) return "yarn";
 
   return "npm";
 }

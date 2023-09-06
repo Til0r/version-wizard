@@ -10,8 +10,8 @@ import {
   workspace,
 } from "vscode";
 import { vWBaseScriptsConstant } from "./constants/vw-base-scripts.constant";
-import { VWTreeItem } from "./vw-tree-item";
-import { VWWorkspaceTreeItem } from "./vw-workspace-tree-item";
+import { VWTreeItem } from "./tree-item/vw-tree-item";
+import { VWWorkspaceTreeItem } from "./tree-item/vw-workspace-tree-item";
 import path = require("path");
 
 export class VWNodeProvider
@@ -65,7 +65,7 @@ export class VWNodeProvider
     if (this.pathExists(packageJsonPath)) {
       const workspaceDir: string = path.dirname(packageJsonPath);
       resolve(
-        vWBaseScriptsConstant.map(({ name, command }) => {
+        vWBaseScriptsConstant.map(({ name, command, icon }) => {
           const cmd = {
             title: "Run scripts",
             command: "vw.command",
@@ -75,6 +75,7 @@ export class VWNodeProvider
           return new VWTreeItem(
             name,
             TreeItemCollapsibleState.None,
+            icon,
             cmd,
             command
           );

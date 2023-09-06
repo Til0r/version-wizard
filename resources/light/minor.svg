@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-_minor">
+      <rect width="24" height="24"/>
+    </clipPath>
+  </defs>
+  <g id="_minor" clip-path="url(#clip-_minor)">
+    <text id="x._.x" data-name="x.+.x" transform="translate(1 16)" fill="#707070" font-size="10" font-family="SF Pro"><tspan x="0" y="0">x.</tspan><tspan y="0" fill="#22eb5d">+</tspan><tspan y="0">.x</tspan></text>
+  </g>
+</svg>
