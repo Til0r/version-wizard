@@ -18,7 +18,7 @@
         {
           "id": "vw",
           "title": "Version Wizard",
-          "icon": "media/icon.svg"
+          "icon": "${versions}"
         }
       ]
     },

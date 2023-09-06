@@ -1,10 +1,10 @@
 import { readFile } from "fs";
 import { Terminal, extensions, window } from "vscode";
+import { vWBaseScriptsConstant } from "./constants/vw-base-scripts.constant";
 import {
-  ScriptsCommandConstant,
-  baseScriptsConstant,
+  VWScriptsCommandConstant,
   getPackageManager,
-} from "./constants/scripts-command.constant";
+} from "./constants/vw-scripts-command.constant";
 import { VWQuickPickItem } from "./vw-quick-pick";
 import path = require("path");
 
@@ -27,8 +27,8 @@ export function vwQuickPick() {
 
       // terminal.sendText
       console.log(
-        `${baseScriptsConstant.find((item) => item.name === task)?.command} ${
-          scriptBuild ? ScriptsCommandConstant.NO_GIT_TAG_VERSION : ""
+        `${vWBaseScriptsConstant.find((item) => item.name === task)?.command} ${
+          scriptBuild ? VWScriptsCommandConstant.NO_GIT_TAG_VERSION : ""
         }`
       );
 
@@ -40,16 +40,16 @@ export function vwQuickPick() {
             // terminal.sendText
             console.log(
               `${getPackageManager()} run ${scriptBuild} && ${
-                ScriptsCommandConstant.ADD_ALL
-              } && ${ScriptsCommandConstant.COMMIT_TAG(
+                VWScriptsCommandConstant.ADD_ALL
+              } && ${VWScriptsCommandConstant.COMMIT_TAG(
                 version,
                 getGitBranchName()
-              )} && ${ScriptsCommandConstant.CREATE_TAG(
+              )} && ${VWScriptsCommandConstant.CREATE_TAG(
                 version
-              )} && ${ScriptsCommandConstant.PUSH_TAG(version)}`
+              )} && ${VWScriptsCommandConstant.PUSH_TAG(version)}`
             );
           // terminal.sendText
-          else console.log(`${ScriptsCommandConstant.PUSH_TAG(version)}`);
+          else console.log(`${VWScriptsCommandConstant.PUSH_TAG(version)}`);
         });
       }, 1000);
     };

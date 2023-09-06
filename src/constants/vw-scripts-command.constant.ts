@@ -4,7 +4,7 @@ import path = require("path");
 
 const getFlagYarn = () => (getPackageManager() === "yarn" ? "--" : "");
 
-export class ScriptsCommandConstant {
+export class VWScriptsCommandConstant {
   public static ADD_ALL = "git add .";
   public static PATCH = `${getPackageManager()} version ${getFlagYarn()}patch`;
   public static MINOR = `${getPackageManager()} version ${getFlagYarn()}minor`;
@@ -16,25 +16,6 @@ export class ScriptsCommandConstant {
   public static COMMIT_TAG = (version: string, branch: string) =>
     `git commit -am 'New version(${version}) from branch ${branch}'`;
 }
-
-export const baseScriptsConstant = [
-  {
-    name: "patch",
-    command: ScriptsCommandConstant.PATCH,
-  },
-  {
-    name: "minor",
-    command: ScriptsCommandConstant.MINOR,
-  },
-  {
-    name: "major",
-    command: ScriptsCommandConstant.MAJOR,
-  },
-  {
-    name: "prerelease",
-    command: ScriptsCommandConstant.PRERELEASE,
-  },
-];
 
 export function getPackageManager() {
   const rootPath: string = workspace.rootPath || ".";
