@@ -40,12 +40,22 @@
         "command": "vw.refresh",
         "title": "Refresh",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "vw.collapse",
+        "title": "Collapse",
+        "icon": "$(collapse-all)"
       }
     ],
     "menus": {
       "view/title": [
         {
           "command": "vw.refresh",
+          "when": "view == vw",
+          "group": "navigation"
+        },
+        {
+          "command": "vw.collapse",
           "when": "view == vw",
           "group": "navigation"
         }

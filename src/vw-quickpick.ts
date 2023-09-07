@@ -1,17 +1,17 @@
 import { readFile } from "fs";
 import { Terminal, extensions, window } from "vscode";
-import { vWBaseScriptsConstant } from "./constants/vw-base-scripts.constant";
-import {
-  VWScriptsCommandConstant,
-  getPackageManager,
-} from "./constants/vw-scripts-command.constant";
+import { VWScriptsCommandConstant } from "./constants/vw-scripts-command.constant";
+import { VWTreeItem } from "./tree-item/vw-tree-item";
+import { getPackageManager } from "./vw-node-provider";
 import { VWQuickPickItem } from "./vw-quick-pick";
 import path = require("path");
 
-export function vWQuickPick(workspaceRoot: string) {
+export function vWQuickPick() {
   return function ({ task, cwd }: any) {
+    const fsPath = (task as VWTreeItem).command?.arguments?.at(1);
+
     const runScripts = function (scriptBuild = "") {
-      const name: string = `${path.basename(cwd)} ~ ${task}`;
+      const name: string = `${path.basename(fsPath)} ~ ${task.label}`;
 
       let terminal: Terminal;
 
@@ -28,19 +28,19 @@ export function vWQuickPick(workspaceRoot: string) {
 
       // terminal.sendText
       console.log(
-        `${vWBaseScriptsConstant.find((item) => item.name === task)?.command} ${
+        `${task.data} ${
           scriptBuild ? VWScriptsCommandConstant.NO_GIT_TAG_VERSION : ""
         }`
       );
 
       setTimeout(() => {
-        getDataFromPackageJson(workspaceRoot).then((packageJson: any) => {
+        getDataFromPackageJson(fsPath).then((packageJson: any) => {
           const version = packageJson["version"];
 
           if (scriptBuild)
             // terminal.sendText
             console.log(
-              `${getPackageManager()} run ${scriptBuild} && ${
+              `${getPackageManager(fsPath)} run ${scriptBuild} && ${
                 VWScriptsCommandConstant.ADD_ALL
               } && ${VWScriptsCommandConstant.COMMIT_TAG(
                 version,
@@ -55,14 +55,13 @@ export function vWQuickPick(workspaceRoot: string) {
       }, 1000);
     };
 
-    console.log("task:", task);
     generateQuickPick(
-      `Version Wizard (${task}): Execute also a build?`,
+      `Version Wizard (${task.label}): Execute also a build?`,
       [new VWQuickPickItem("Yes", ""), new VWQuickPickItem("No", "")],
       (selectedOption: VWQuickPickItem) => {
         switch (selectedOption.label) {
           case "Yes":
-            getDataFromPackageJson(workspaceRoot).then((packageJson: any) => {
+            getDataFromPackageJson(fsPath).then((packageJson: any) => {
               if (packageJson) {
                 const scriptForBuildFounded = Object.keys(
                   packageJson.scripts as Object

@@ -1,4 +1,3 @@
-import path = require("path");
 import { QuickPickItem } from "vscode";
 
 export class VWQuickPickItem implements QuickPickItem {
