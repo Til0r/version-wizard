@@ -21,7 +21,7 @@
     "Other"
   ],
   "license": "MIT",
-  "icon": "./resources/icon.png",
+  "icon": "resources/icon.png",
   "keywords": [
     "tag",
     "version",
@@ -30,7 +30,7 @@
     "pnpm"
   ],
   "activationEvents": [],
-  "main": "./out/extension.js",
+  "main": "out/extension.js",
   "pricing": "Free",
   "contributes": {
     "viewsContainers": {
