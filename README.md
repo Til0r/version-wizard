@@ -1,4 +1,4 @@
-# Version Wizard - Your Project Tagging and Build Script Selector for Visual Studio Code
+# <img src="/resources/icon.svg" width="50"> Version Wizard - Your Project Tagging and Build Script Selector for Visual Studio Code
 
 Tired of the repetitive task of tagging and manually selecting build scripts for your projects in Visual Studio Code? Meet Version Wizard, the extension that simplifies project management and gives you full control over your build process.
 
