@@ -26,37 +26,36 @@ export function vWQuickPick() {
 
       terminal.show();
 
-      // terminal.sendText
-      console.log(
-        `${task.data} ${
-          scriptBuild ? VWScriptsCommandConstant.NO_GIT_TAG_VERSION : ""
-        }`
+      terminal.sendText(
+        `${task.data} ${VWScriptsCommandConstant.NO_GIT_TAG_VERSION}`
       );
 
       setTimeout(() => {
         getDataFromPackageJson(fsPath).then((packageJson: any) => {
           const version = packageJson["version"];
 
-          if (scriptBuild)
-            // terminal.sendText
-            console.log(
-              `${getPackageManager(fsPath)} run ${scriptBuild} && ${
-                VWScriptsCommandConstant.ADD_ALL
-              } && ${VWScriptsCommandConstant.COMMIT_TAG(
-                version,
-                getGitBranchName()
-              )} && ${VWScriptsCommandConstant.CREATE_TAG(
-                version
-              )} && ${VWScriptsCommandConstant.PUSH_TAG(version)}`
-            );
-          // terminal.sendText
-          else console.log(`${VWScriptsCommandConstant.PUSH_TAG(version)}`);
+          terminal.sendText(
+            `${
+              scriptBuild
+                ? `${getPackageManager(fsPath)} run ${scriptBuild} &&`
+                : ""
+            } ${
+              VWScriptsCommandConstant.ADD_ALL
+            } && ${VWScriptsCommandConstant.COMMIT_TAG(
+              version,
+              getGitBranchName()
+            )} && ${VWScriptsCommandConstant.CREATE_TAG(
+              version
+            )} && ${VWScriptsCommandConstant.PUSH_TAG(version)} && ${
+              VWScriptsCommandConstant.PUSH
+            }`
+          );
         });
-      }, 1000);
+      }, 2000);
     };
 
     generateQuickPick(
-      `Version Wizard (${task.label}): Execute also a build?`,
+      `Version Wizard (task ~ ${task.label}): run a build too?`,
       [new VWQuickPickItem("Yes", ""), new VWQuickPickItem("No", "")],
       (selectedOption: VWQuickPickItem) => {
         switch (selectedOption.label) {
@@ -75,7 +74,7 @@ export function vWQuickPick() {
 
                 if (scriptForBuildFounded.length)
                   generateQuickPick(
-                    "Version Wizard: Choose the script for build:",
+                    `Version Wizard (task ~ ${task.label}): Choose the script for build:`,
                     scriptForBuildFounded,
                     (selectedOption: VWQuickPickItem) => {
                       runScripts(selectedOption.label);

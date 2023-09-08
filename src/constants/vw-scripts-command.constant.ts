@@ -19,6 +19,7 @@ export class VWScriptsCommandConstant {
     )}prerelease --preid=rc`;
   public static CREATE_TAG = (version: string) => `git tag ${version}`;
   public static PUSH_TAG = (version: string) => `git push origin ${version}`;
+  public static PUSH = "git push";
   public static NO_GIT_TAG_VERSION = "--no-git-tag-version";
   public static COMMIT_TAG = (version: string, branch: string) =>
     `git commit -am 'New version(${version}) from branch ${branch}'`;
