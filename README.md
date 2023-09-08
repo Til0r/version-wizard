@@ -1,71 +1,35 @@
-# version-wizard README
+# Version Wizard - Your Project Tagging and Build Script Selector for Visual Studio Code
 
-This is the README for your extension "version-wizard". After writing up a brief description, we recommend including the following sections.
+Tired of the repetitive task of tagging and manually selecting build scripts for your projects in Visual Studio Code? Meet Version Wizard, the extension that simplifies project management and gives you full control over your build process.
 
-## Features
+## Key Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Effortless Project Tagging**: Version Wizard makes project tagging a breeze. Simply open your project, head to the explorer section, and click the play button to start the tagging process.
 
-For example if there is an image subfolder under your extension project workspace:
+- **Flexible Package Manager Support**: Whether you use Yarn, npm, or pnpm, Version Wizard automatically adapts to your preferred package manager, ensuring compatibility with your development setup.
 
-\!\[feature X\]\(images/feature-x.png\)
+- **Custom Build Script Selection**: With Version Wizard, you have the power to define and write your build scripts in your project's package.json. Then, when it's time to build, use the quick pick feature to select the desired script, tailored to your project's unique needs.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- **Manage Single Projects and Workspaces**: Whether you're working on a single project or overseeing an entire workspace, Version Wizard provides a unified solution for tagging and build script selection, streamlining your workflow.
 
-## Requirements
+## Getting Started
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+1. Install Version Wizard from the Visual Studio Code Marketplace.
+2. Open your project or workspace in Visual Studio Code.
+3. Navigate to the explorer section and click the play button to initiate the tagging process.
+4. Define and write your build scripts in your project's package.json.
+5. When it's time to build, use the quick pick feature to select the desired script.
 
-## Extension Settings
+## Installation
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+You can find Version Wizard on the Visual Studio Code Marketplace [here](https://marketplace.visualstudio.com/items?itemName=).
 
-For example:
+## Contributing
 
-This extension contributes the following settings:
+We welcome contributions! If you have ideas or want to improve Version Wizard, please open an issue or submit a pull request.
 
-- `myExtension.enable`: Enable/disable this extension.
-- `myExtension.thing`: Set to `blah` to do something.
+## License
 
-## Known Issues
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-- [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-- Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-- Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-- Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-- [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-- [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Take charge of your development process and enhance your productivity with Version Wizard. Simplify project management and build script handling like never before!

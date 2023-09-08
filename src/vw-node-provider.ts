@@ -10,8 +10,8 @@ import {
   workspace,
 } from "vscode";
 import { VWScriptsCommandConstant } from "./constants/vw-scripts-command.constant";
-import { VWTreeItem } from "./tree-item/vw-tree-item";
-import { VWWorkspaceTreeItem } from "./tree-item/vw-workspace-tree-item";
+import { VWWorkspaceTreeItem } from "./items/vw-workspace.tree-item";
+import { VWTreeItem } from "./items/vw.tree-item";
 import path = require("path");
 
 export const getPackageManagerList = () => [
@@ -70,17 +70,6 @@ export class VWNodeProvider
 
       resolve([
         new VWTreeItem(
-          VWScriptsCommandConstant.MINOR,
-          TreeItemCollapsibleState.None,
-          `${VWScriptsCommandConstant.MINOR}.svg`,
-          {
-            title: "Run scripts",
-            command: "vw.command",
-            arguments: [VWScriptsCommandConstant.MINOR, fsPath],
-          },
-          VWScriptsCommandConstant.MINOR_CMD(packageManager)
-        ),
-        new VWTreeItem(
           VWScriptsCommandConstant.PATCH,
           TreeItemCollapsibleState.None,
           `${VWScriptsCommandConstant.PATCH}.svg`,
@@ -90,6 +79,17 @@ export class VWNodeProvider
             arguments: [VWScriptsCommandConstant.PATCH, fsPath],
           },
           VWScriptsCommandConstant.PATCH_CMD(packageManager)
+        ),
+        new VWTreeItem(
+          VWScriptsCommandConstant.MINOR,
+          TreeItemCollapsibleState.None,
+          `${VWScriptsCommandConstant.MINOR}.svg`,
+          {
+            title: "Run scripts",
+            command: "vw.command",
+            arguments: [VWScriptsCommandConstant.MINOR, fsPath],
+          },
+          VWScriptsCommandConstant.MINOR_CMD(packageManager)
         ),
         new VWTreeItem(
           VWScriptsCommandConstant.MAJOR,

@@ -1,9 +1,9 @@
 import { readFile } from "fs";
 import { Terminal, extensions, window } from "vscode";
 import { VWScriptsCommandConstant } from "./constants/vw-scripts-command.constant";
-import { VWTreeItem } from "./tree-item/vw-tree-item";
+import { VWTreeItem } from "./items/vw.tree-item";
 import { getPackageManager } from "./vw-node-provider";
-import { VWQuickPickItem } from "./vw-quick-pick";
+import { VWQuickPickItem } from "./items/vw-quick.pick-item";
 import path = require("path");
 
 export function vWQuickPick() {

@@ -5,7 +5,7 @@ import {
   window,
   workspace,
 } from "vscode";
-import { VWTreeItem } from "./tree-item/vw-tree-item";
+import { VWTreeItem } from "./items/vw.tree-item";
 import { VWNodeProvider, getPackageManagerList } from "./vw-node-provider";
 import { vWQuickPick } from "./vw-quickpick";
 
