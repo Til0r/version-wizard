@@ -32,7 +32,7 @@ Tired of the repetitive task of tagging and manually selecting build scripts for
 
 ## Installation
 
-You can find Version Wizard on the Visual Studio Code Marketplace [here](https://marketplace.visualstudio.com/items?itemName=).
+You can find Version Wizard on the Visual Studio Code Marketplace [here](https://marketplace.visualstudio.com/items?itemName=til0r.version-wizard).
 
 ## Contributing
 
