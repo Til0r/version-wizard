@@ -1,4 +1,4 @@
-# <img src="/resources/icon.svg" width="50"> Version Wizard - Your Project Tagging and Build Script Selector for Visual Studio Code
+# <img src="/resources/icon.svg" width="50"> Version Wizard
 
 Tired of the repetitive task of tagging and manually selecting build scripts for your projects in Visual Studio Code? Meet Version Wizard, the extension that simplifies project management and gives you full control over your build process.
 
@@ -19,6 +19,13 @@ Tired of the repetitive task of tagging and manually selecting build scripts for
 3. Navigate to the explorer section and click the play button to initiate the tagging process.
 4. Define and write your build scripts in your project's package.json.
 5. When it's time to build, use the quick pick feature to select the desired script.
+
+## Demo
+### Generate new tag version with build
+![VersioningWithBuild](https://github.com/Til0r/version-wizard/assets/24627876/dad57c2f-3049-4ea6-aa81-92a2a0752c2a)
+
+### Generate new tag version without build
+![VersioningWithoutBuild](https://github.com/Til0r/version-wizard/assets/24627876/dbf441b2-d143-4f7d-9e61-8081e8075ffb)
 
 ## Installation
 
