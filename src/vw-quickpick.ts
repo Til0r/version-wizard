@@ -67,7 +67,7 @@ export function vWQuickPick() {
                 )
                   .map((key: string) => {
                     const value: string = packageJson.scripts[key];
-                    if (value.includes("build"))
+                    if (key.includes("build") || value.includes("build"))
                       return new VWQuickPickItem(key, value);
                   })
                   .filter(Boolean) as VWQuickPickItem[];
