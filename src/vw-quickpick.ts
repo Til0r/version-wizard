@@ -51,7 +51,7 @@ export function vWQuickPick() {
             }`
           );
         });
-      }, 2000);
+      }, 3500);
     };
 
     generateQuickPick(
