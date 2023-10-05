@@ -2,7 +2,7 @@
   "name": "version-wizard",
   "displayName": "Version Wizard",
   "description": "Streamline your frontend project management with Version Wizard, the essential extension that simplifies tagging and building new versions effortlessly.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "publisher": "til0r",
   "repository": {
     "type": "git",
