@@ -12,9 +12,4 @@ Features:
 Fix:
 
 - Include 'build' in script name matching
-
-# 1.0.1
-
-Fix:
-
 - Update setTimeout timer between the scripts

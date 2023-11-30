@@ -69,48 +69,24 @@ export class VWNodeProvider
       const packageManager = getPackageManager(fsPath);
 
       resolve([
-        new VWTreeItem(
+        this.getVWTreeItemClass(
+          fsPath,
           VWScriptsCommandConstant.PATCH,
-          TreeItemCollapsibleState.None,
-          `${VWScriptsCommandConstant.PATCH}.svg`,
-          {
-            title: "Run scripts",
-            command: "vw.command",
-            arguments: [VWScriptsCommandConstant.PATCH, fsPath],
-          },
           VWScriptsCommandConstant.PATCH_CMD(packageManager)
         ),
-        new VWTreeItem(
+        this.getVWTreeItemClass(
+          fsPath,
           VWScriptsCommandConstant.MINOR,
-          TreeItemCollapsibleState.None,
-          `${VWScriptsCommandConstant.MINOR}.svg`,
-          {
-            title: "Run scripts",
-            command: "vw.command",
-            arguments: [VWScriptsCommandConstant.MINOR, fsPath],
-          },
           VWScriptsCommandConstant.MINOR_CMD(packageManager)
         ),
-        new VWTreeItem(
+        this.getVWTreeItemClass(
+          fsPath,
           VWScriptsCommandConstant.MAJOR,
-          TreeItemCollapsibleState.None,
-          `${VWScriptsCommandConstant.MAJOR}.svg`,
-          {
-            title: "Run scripts",
-            command: "vw.command",
-            arguments: [VWScriptsCommandConstant.MAJOR, fsPath],
-          },
           VWScriptsCommandConstant.MAJOR_CMD(packageManager)
         ),
-        new VWTreeItem(
+        this.getVWTreeItemClass(
+          fsPath,
           VWScriptsCommandConstant.PRERELEASE,
-          TreeItemCollapsibleState.None,
-          `${VWScriptsCommandConstant.PRERELEASE}.svg`,
-          {
-            title: "Run scripts",
-            command: "vw.command",
-            arguments: [VWScriptsCommandConstant.PRERELEASE, fsPath],
-          },
           VWScriptsCommandConstant.PRERELEASE_CMD(packageManager)
         ),
       ]);
@@ -119,6 +95,23 @@ export class VWNodeProvider
       resolve([]);
     }
   }
+
+  private getVWTreeItemClass = (
+    fsPath: string,
+    label: VWScriptsCommandConstant,
+    command: string
+  ): VWTreeItem =>
+    new VWTreeItem(
+      label as string,
+      TreeItemCollapsibleState.None,
+      `${label}.svg`,
+      {
+        title: "Run scripts",
+        command: "vw.command",
+        arguments: [label, fsPath],
+      },
+      command
+    );
 
   private getVWWorkspaceTreeItem(
     resolve: Function,

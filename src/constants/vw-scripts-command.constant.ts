@@ -13,10 +13,10 @@ export class VWScriptsCommandConstant {
     `${packageManager} version ${getFlagYarn(packageManager)}minor`;
   public static MAJOR_CMD = (packageManager: string) =>
     `${packageManager} version ${getFlagYarn(packageManager)}major`;
-  public static PRERELEASE_CMD = (packageManager: string) =>
+  public static PRERELEASE_CMD = (packageManager: string, preid = "rc") =>
     `${packageManager} version ${getFlagYarn(
       packageManager
-    )}prerelease --preid=rc`;
+    )}prerelease --preid=${preid}`;
   public static CREATE_TAG = (version: string) => `git tag ${version}`;
   public static PUSH_TAG = (version: string) => `git push origin ${version}`;
   public static PUSH = "git push";
