@@ -1,4 +1,4 @@
-import { QuickPickItem } from "vscode";
+import { QuickPickItem } from 'vscode';
 
 export class VWQuickPickItem implements QuickPickItem {
   label: string;

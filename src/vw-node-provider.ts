@@ -1,4 +1,9 @@
-import { accessSync, existsSync } from "fs";
+import { PackageManagerFileListConstant } from '@version-wizard/constants/package-manager-file-list.constant';
+import { PackageManagerListConstant } from '@version-wizard/constants/package-manager-list.constant';
+import { VWScriptsCommandConstant } from '@version-wizard/constants/vw-scripts-command.constant';
+import { VWWorkspaceTreeItem } from '@version-wizard/items/vw-workspace.tree-item';
+import { VWTreeItem } from '@version-wizard/items/vw.tree-item';
+import { accessSync, existsSync } from 'fs';
 import {
   Event,
   EventEmitter,
@@ -8,63 +13,60 @@ import {
   WorkspaceFolder,
   window,
   workspace,
-} from "vscode";
-import { VWScriptsCommandConstant } from "./constants/vw-scripts-command.constant";
-import { VWWorkspaceTreeItem } from "./items/vw-workspace.tree-item";
-import { VWTreeItem } from "./items/vw.tree-item";
-import path = require("path");
+} from 'vscode';
+import path = require('path');
 
 export const getPackageManagerList = () => [
-  "pnpm-lock.yaml",
-  "yarn.lock",
-  "package-lock.json",
+  PackageManagerFileListConstant.PNPM_LOCK,
+  PackageManagerFileListConstant.YARN_LOCK,
+  PackageManagerFileListConstant.PACKAGE_LOCK,
 ];
 
-export class VWNodeProvider
-  implements TreeDataProvider<VWTreeItem | VWWorkspaceTreeItem>
-{
+export class VWNodeProvider implements TreeDataProvider<VWTreeItem | VWWorkspaceTreeItem> {
   private _onDidChangeTreeData: EventEmitter<
     VWTreeItem | VWWorkspaceTreeItem | undefined | null | void
   > = new EventEmitter<VWTreeItem | undefined | null | void>();
 
-  readonly onDidChangeTreeData: Event<
-    VWTreeItem | VWWorkspaceTreeItem | undefined | null | void
-  > = this._onDidChangeTreeData.event;
+  readonly onDidChangeTreeData: Event<VWTreeItem | VWWorkspaceTreeItem | undefined | null | void> =
+    this._onDidChangeTreeData.event;
 
   constructor(private workspaceRoot: string) {}
 
-  getTreeItem = (element: VWTreeItem | VWWorkspaceTreeItem): TreeItem =>
-    element;
+  getTreeItem = (element: VWTreeItem | VWWorkspaceTreeItem): TreeItem => element;
 
   refresh(): void {
     this._onDidChangeTreeData.fire(undefined);
   }
 
   getChildren(
-    element?: VWTreeItem | VWWorkspaceTreeItem
+    element?: VWTreeItem | VWWorkspaceTreeItem,
   ): Thenable<VWTreeItem[] | VWWorkspaceTreeItem[]> {
-    return new Promise((resolve: Function) => {
-      const folders: WorkspaceFolder[] =
-        workspace.workspaceFolders as WorkspaceFolder[];
+    return new Promise((resolve) => {
+      const folders: WorkspaceFolder[] = workspace.workspaceFolders as WorkspaceFolder[];
 
       if (element) {
         const folder: WorkspaceFolder = folders.find(
-          (o) => o.name === element.label
+          (o) => o.name === element.label,
         ) as WorkspaceFolder;
 
         this.getVWTreeItem(resolve, folder.uri.fsPath);
-      } else if (folders && folders.length > 1)
-        this.getVWWorkspaceTreeItem(resolve, folders);
+      } else if (folders && folders.length > 1) this.getVWWorkspaceTreeItem(resolve, folders);
       else this.getVWTreeItem(resolve, this.workspaceRoot);
     });
   }
 
-  private getVWTreeItem(resolve: Function, fsPath: string): void {
+  private getVWTreeItem(
+    resolve: (
+      value:
+        | VWTreeItem[]
+        | VWWorkspaceTreeItem[]
+        | PromiseLike<VWTreeItem[] | VWWorkspaceTreeItem[]>,
+    ) => void,
+    fsPath: string,
+  ): void {
     if (
-      this.pathExists(path.join(fsPath, "package.json")) &&
-      getPackageManagerList().some((item) =>
-        this.pathExists(path.join(this.workspaceRoot, item))
-      )
+      this.pathExists(path.join(fsPath, PackageManagerFileListConstant.PACKAGE_LOCK)) &&
+      getPackageManagerList().some((item) => this.pathExists(path.join(this.workspaceRoot, item)))
     ) {
       const packageManager = getPackageManager(fsPath);
 
@@ -72,26 +74,26 @@ export class VWNodeProvider
         this.getVWTreeItemClass(
           fsPath,
           VWScriptsCommandConstant.PATCH,
-          VWScriptsCommandConstant.PATCH_CMD(packageManager)
+          VWScriptsCommandConstant.PATCH_CMD(packageManager),
         ),
         this.getVWTreeItemClass(
           fsPath,
           VWScriptsCommandConstant.MINOR,
-          VWScriptsCommandConstant.MINOR_CMD(packageManager)
+          VWScriptsCommandConstant.MINOR_CMD(packageManager),
         ),
         this.getVWTreeItemClass(
           fsPath,
           VWScriptsCommandConstant.MAJOR,
-          VWScriptsCommandConstant.MAJOR_CMD(packageManager)
+          VWScriptsCommandConstant.MAJOR_CMD(packageManager),
         ),
         this.getVWTreeItemClass(
           fsPath,
           VWScriptsCommandConstant.PRERELEASE,
-          VWScriptsCommandConstant.PRERELEASE_CMD(packageManager)
+          VWScriptsCommandConstant.PRERELEASE_CMD(packageManager),
         ),
       ]);
     } else {
-      window.showInformationMessage("Workspace has no package.json");
+      window.showInformationMessage('Workspace has no package.json');
       resolve([]);
     }
   }
@@ -99,36 +101,44 @@ export class VWNodeProvider
   private getVWTreeItemClass = (
     fsPath: string,
     label: VWScriptsCommandConstant,
-    command: string
+    command: string,
   ): VWTreeItem =>
     new VWTreeItem(
       label as string,
       TreeItemCollapsibleState.None,
       `${label}.svg`,
       {
-        title: "Run scripts",
-        command: "vw.command",
+        title: 'Run scripts',
+        command: 'vw.command',
         arguments: [label, fsPath],
       },
-      command
+      command,
     );
 
   private getVWWorkspaceTreeItem(
-    resolve: Function,
-    folders: WorkspaceFolder[]
+    resolve: (
+      value:
+        | VWTreeItem[]
+        | VWWorkspaceTreeItem[]
+        | PromiseLike<VWTreeItem[] | VWWorkspaceTreeItem[]>,
+    ) => void,
+    folders: WorkspaceFolder[],
   ): void {
     const treeItems: VWWorkspaceTreeItem[] = [];
 
     const folderFiltered = folders.filter((fold) =>
       getPackageManagerList().some((packageManager) =>
-        this.pathExists(path.join(fold.uri.fsPath, packageManager))
-      )
+        this.pathExists(path.join(fold.uri.fsPath, packageManager)),
+      ),
     );
 
     if (folderFiltered.length) {
       folderFiltered.forEach((folder: WorkspaceFolder): void => {
         const workspaceRoot: string = folder.uri.fsPath;
-        const packageJsonPath = path.join(workspaceRoot, "package.json");
+        const packageJsonPath = path.join(
+          workspaceRoot,
+          PackageManagerFileListConstant.PACKAGE_LOCK,
+        );
 
         const name = folder.name;
         if (this.pathExists(packageJsonPath)) {
@@ -136,14 +146,14 @@ export class VWNodeProvider
             new VWWorkspaceTreeItem(
               name,
               TreeItemCollapsibleState.Collapsed,
-              `${name} Workspace Folder`
-            )
+              `${name} Workspace Folder`,
+            ),
           );
         }
       });
       resolve(treeItems);
     } else {
-      window.showInformationMessage("Workspace has no package manager!");
+      window.showInformationMessage('Workspace has no package manager!');
       resolve([]);
     }
   }
@@ -159,8 +169,9 @@ export class VWNodeProvider
 }
 
 export function getPackageManager(fsPath: string) {
-  if (existsSync(path.join(fsPath, "pnpm-lock.yaml"))) return "pnpm";
-  if (existsSync(path.join(fsPath, "yarn.lock"))) return "yarn";
-
-  return "npm";
+  if (existsSync(path.join(fsPath, PackageManagerFileListConstant.PNPM_LOCK)))
+    return PackageManagerListConstant.PNPM;
+  else if (existsSync(path.join(fsPath, PackageManagerFileListConstant.YARN_LOCK)))
+    return PackageManagerListConstant.YARN;
+  return PackageManagerListConstant.NPM;
 }

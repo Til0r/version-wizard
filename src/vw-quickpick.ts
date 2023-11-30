@@ -1,23 +1,22 @@
-import { readFile } from "fs";
-import { Terminal, extensions, window } from "vscode";
-import { VWScriptsCommandConstant } from "./constants/vw-scripts-command.constant";
-import { VWTreeItem } from "./items/vw.tree-item";
-import { getPackageManager } from "./vw-node-provider";
-import { VWQuickPickItem } from "./items/vw-quick.pick-item";
-import path = require("path");
+import { PackageManagerFileListConstant } from '@version-wizard/constants/package-manager-file-list.constant';
+import { VWScriptsCommandConstant } from '@version-wizard/constants/vw-scripts-command.constant';
+import { VWQuickPickItem } from '@version-wizard/items/vw-quick.pick-item';
+import { VWTreeItem } from '@version-wizard/items/vw.tree-item';
+import { readFile } from 'fs';
+import { Terminal, extensions, window } from 'vscode';
+import { getPackageManager } from './vw-node-provider';
+import path = require('path');
 
 export function vWQuickPick() {
-  return function ({ task, cwd }: any) {
+  return function ({ task, cwd }: { task: VWTreeItem; cwd: string }) {
     const fsPath = (task as VWTreeItem).command?.arguments?.at(1);
 
-    const runScripts = function (scriptBuild = "") {
+    const runScripts = function (scriptBuild = '') {
       const name: string = `${path.basename(fsPath)} ~ ${task.label}`;
 
       let terminal: Terminal;
 
-      const terminalAlreadyCreated = window.terminals.find(
-        (item) => item.name === name
-      );
+      const terminalAlreadyCreated = window.terminals.find((item) => item.name === name);
 
       if (terminalAlreadyCreated) terminal = terminalAlreadyCreated;
       else {
@@ -26,29 +25,23 @@ export function vWQuickPick() {
 
       terminal.show();
 
-      terminal.sendText(
-        `${task.data} ${VWScriptsCommandConstant.NO_GIT_TAG_VERSION}`
-      );
+      terminal.sendText(`${task.data} ${VWScriptsCommandConstant.NO_GIT_TAG_VERSION}`);
 
       setTimeout(() => {
-        getDataFromPackageJson(fsPath).then((packageJson: any) => {
-          const version = packageJson["version"];
+        getDataFromPackageJson(fsPath).then((packageJson) => {
+          const version = packageJson.version;
 
           terminal.sendText(
-            `${
-              scriptBuild
-                ? `${getPackageManager(fsPath)} run ${scriptBuild} &&`
-                : ""
-            } ${
+            `${scriptBuild ? `${getPackageManager(fsPath)} run ${scriptBuild} &&` : ''} ${
               VWScriptsCommandConstant.ADD_ALL
             } && ${VWScriptsCommandConstant.COMMIT_TAG(
               version,
-              getGitBranchName()
+              getGitBranchName(),
             )} && ${VWScriptsCommandConstant.CREATE_TAG(
-              version
+              version,
             )} && ${VWScriptsCommandConstant.PUSH_TAG(version)} && ${
               VWScriptsCommandConstant.PUSH
-            }`
+            }`,
           );
         });
       }, 3500);
@@ -56,18 +49,16 @@ export function vWQuickPick() {
 
     generateQuickPick(
       `Version Wizard (task ~ ${task.label}): run a build too?`,
-      [new VWQuickPickItem("Yes", ""), new VWQuickPickItem("No", "")],
+      [new VWQuickPickItem('Yes', ''), new VWQuickPickItem('No', '')],
       (selectedOption: VWQuickPickItem) => {
         switch (selectedOption.label) {
-          case "Yes":
-            getDataFromPackageJson(fsPath).then((packageJson: any) => {
+          case 'Yes':
+            getDataFromPackageJson(fsPath).then((packageJson) => {
               if (packageJson) {
-                const scriptForBuildFounded = Object.keys(
-                  packageJson.scripts as Object
-                )
+                const scriptForBuildFounded = Object.keys(packageJson.scripts)
                   .map((key: string) => {
                     const value: string = packageJson.scripts[key];
-                    if (key.includes("build") || value.includes("build"))
+                    if (key.includes('build') || value.includes('build'))
                       return new VWQuickPickItem(key, value);
                   })
                   .filter(Boolean) as VWQuickPickItem[];
@@ -78,18 +69,18 @@ export function vWQuickPick() {
                     scriptForBuildFounded,
                     (selectedOption: VWQuickPickItem) => {
                       runScripts(selectedOption.label);
-                    }
+                    },
                   );
               }
             });
             break;
-          case "No":
+          case 'No':
             runScripts();
             break;
           default:
             break;
         }
-      }
+      },
     );
   };
 }
@@ -97,7 +88,7 @@ export function vWQuickPick() {
 function generateQuickPick(
   title: string,
   vWQuickPickItem: VWQuickPickItem[],
-  action: Function
+  action: (selectedOption: VWQuickPickItem) => void,
 ) {
   const quickPick = window.createQuickPick<VWQuickPickItem>();
   quickPick.title = title;
@@ -115,20 +106,22 @@ function generateQuickPick(
   quickPick.show();
 }
 
-function getGitBranchName(): string | "" {
-  const gitExtension = extensions.getExtension("vscode.git");
+function getGitBranchName(): string | '' {
+  const gitExtension = extensions.getExtension('vscode.git');
 
   if (gitExtension && gitExtension.isActive)
     return gitExtension.exports.getAPI(1).repositories[0].state.HEAD.name;
 
-  return "";
+  return '';
 }
 
-function getDataFromPackageJson(cwd: string) {
-  return new Promise((resolve: Function, reject: Function) => {
-    const packageJsonPath = path.join(cwd, "package.json");
+function getDataFromPackageJson(
+  cwd: string,
+): Promise<{ scripts: Record<string, string>; version: string }> {
+  return new Promise((resolve, reject) => {
+    const packageJsonPath = path.join(cwd, PackageManagerFileListConstant.PACKAGE_LOCK);
 
-    readFile(packageJsonPath, "utf8", (err, data) => {
+    readFile(packageJsonPath, 'utf8', (err, data) => {
       if (err) reject(err);
       resolve(JSON.parse(data));
     });

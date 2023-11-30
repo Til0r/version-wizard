@@ -9,6 +9,14 @@
 		"downlevelIteration": true,
 		"sourceMap": true,
 		"rootDir": "src",
-		"strict": true
+		"strict": true,
+		"paths": {
+			"@version-wizard/constants/*": [
+				"./src/constants/*"
+			],
+			"@version-wizard/items/*": [
+				"./src/items/*"
+			],
+		}
 	}
 }
