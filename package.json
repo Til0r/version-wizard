@@ -37,7 +37,7 @@
       "panel": [
         {
           "id": "vw",
-          "title": "Version Wizard ",
+          "title": "Version Wizard",
           "icon": "resources/icon.svg"
         }
       ]

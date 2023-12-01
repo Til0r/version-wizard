@@ -1,8 +1,3 @@
-import { PackageManagerFileListConstant } from '@version-wizard/constants/package-manager-file-list.constant';
-import { PackageManagerListConstant } from '@version-wizard/constants/package-manager-list.constant';
-import { VWScriptsCommandConstant } from '@version-wizard/constants/vw-scripts-command.constant';
-import { VWWorkspaceTreeItem } from '@version-wizard/items/vw-workspace.tree-item';
-import { VWTreeItem } from '@version-wizard/items/vw.tree-item';
 import { accessSync, existsSync } from 'fs';
 import {
   Event,
@@ -14,6 +9,11 @@ import {
   window,
   workspace,
 } from 'vscode';
+import { PackageManagerFileListConstant } from './constants/package-manager-file-list.constant';
+import { PackageManagerListConstant } from './constants/package-manager-list.constant';
+import { VWScriptsCommandConstant } from './constants/vw-scripts-command.constant';
+import { VWWorkspaceTreeItem } from './items/vw-workspace.tree-item';
+import { VWTreeItem } from './items/vw.tree-item';
 import path = require('path');
 
 export const getPackageManagerList = () => [
@@ -65,7 +65,6 @@ export class VWNodeProvider implements TreeDataProvider<VWTreeItem | VWWorkspace
     fsPath: string,
   ): void {
     if (
-      this.pathExists(path.join(fsPath, PackageManagerFileListConstant.PACKAGE_LOCK)) &&
       getPackageManagerList().some((item) => this.pathExists(path.join(this.workspaceRoot, item)))
     ) {
       const packageManager = getPackageManager(fsPath);
@@ -91,9 +90,24 @@ export class VWNodeProvider implements TreeDataProvider<VWTreeItem | VWWorkspace
           VWScriptsCommandConstant.PRERELEASE,
           VWScriptsCommandConstant.PRERELEASE_CMD(packageManager),
         ),
+        this.getVWTreeItemClass(
+          fsPath,
+          VWScriptsCommandConstant.PREPATCH,
+          VWScriptsCommandConstant.PREPATCH_CMD(packageManager),
+        ),
+        this.getVWTreeItemClass(
+          fsPath,
+          VWScriptsCommandConstant.PREMINOR,
+          VWScriptsCommandConstant.PREMINOR_CMD(packageManager),
+        ),
+        this.getVWTreeItemClass(
+          fsPath,
+          VWScriptsCommandConstant.PREMAJOR,
+          VWScriptsCommandConstant.PREMAJOR_CMD(packageManager),
+        ),
       ]);
     } else {
-      window.showInformationMessage('Workspace has no package.json');
+      window.showInformationMessage('Workspace has no package manager installed');
       resolve([]);
     }
   }
@@ -106,7 +120,7 @@ export class VWNodeProvider implements TreeDataProvider<VWTreeItem | VWWorkspace
     new VWTreeItem(
       label as string,
       TreeItemCollapsibleState.None,
-      `${label}.svg`,
+      `${(label as string).includes('pre') ? 'pre' : label}.svg`,
       {
         title: 'Run scripts',
         command: 'vw.command',
@@ -135,10 +149,7 @@ export class VWNodeProvider implements TreeDataProvider<VWTreeItem | VWWorkspace
     if (folderFiltered.length) {
       folderFiltered.forEach((folder: WorkspaceFolder): void => {
         const workspaceRoot: string = folder.uri.fsPath;
-        const packageJsonPath = path.join(
-          workspaceRoot,
-          PackageManagerFileListConstant.PACKAGE_LOCK,
-        );
+        const packageJsonPath = path.join(workspaceRoot, PackageManagerFileListConstant.PACKAGE);
 
         const name = folder.name;
         if (this.pathExists(packageJsonPath)) {

@@ -1,9 +1,9 @@
-import { PackageManagerFileListConstant } from '@version-wizard/constants/package-manager-file-list.constant';
-import { VWScriptsCommandConstant } from '@version-wizard/constants/vw-scripts-command.constant';
-import { VWQuickPickItem } from '@version-wizard/items/vw-quick.pick-item';
-import { VWTreeItem } from '@version-wizard/items/vw.tree-item';
 import { readFile } from 'fs';
-import { Terminal, extensions, window } from 'vscode';
+import { Terminal, window } from 'vscode';
+import { PackageManagerFileListConstant } from './constants/package-manager-file-list.constant';
+import { VWScriptsCommandConstant } from './constants/vw-scripts-command.constant';
+import { VWQuickPickItem } from './items/vw-quick.pick-item';
+import { VWTreeItem } from './items/vw.tree-item';
 import { getPackageManager } from './vw-node-provider';
 import path = require('path');
 
@@ -36,7 +36,6 @@ export function vWQuickPick() {
               VWScriptsCommandConstant.ADD_ALL
             } && ${VWScriptsCommandConstant.COMMIT_TAG(
               version,
-              getGitBranchName(),
             )} && ${VWScriptsCommandConstant.CREATE_TAG(
               version,
             )} && ${VWScriptsCommandConstant.PUSH_TAG(version)} && ${
@@ -71,6 +70,7 @@ export function vWQuickPick() {
                       runScripts(selectedOption.label);
                     },
                   );
+                else window.showErrorMessage('Workspace has no build scripts!');
               }
             });
             break;
@@ -106,20 +106,11 @@ function generateQuickPick(
   quickPick.show();
 }
 
-function getGitBranchName(): string | '' {
-  const gitExtension = extensions.getExtension('vscode.git');
-
-  if (gitExtension && gitExtension.isActive)
-    return gitExtension.exports.getAPI(1).repositories[0].state.HEAD.name;
-
-  return '';
-}
-
 function getDataFromPackageJson(
   cwd: string,
 ): Promise<{ scripts: Record<string, string>; version: string }> {
   return new Promise((resolve, reject) => {
-    const packageJsonPath = path.join(cwd, PackageManagerFileListConstant.PACKAGE_LOCK);
+    const packageJsonPath = path.join(cwd, PackageManagerFileListConstant.PACKAGE);
 
     readFile(packageJsonPath, 'utf8', (err, data) => {
       if (err) reject(err);

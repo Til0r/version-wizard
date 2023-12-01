@@ -10,13 +10,5 @@
 		"sourceMap": true,
 		"rootDir": "src",
 		"strict": true,
-		"paths": {
-			"@version-wizard/constants/*": [
-				"./src/constants/*"
-			],
-			"@version-wizard/items/*": [
-				"./src/items/*"
-			],
-		}
 	}
 }

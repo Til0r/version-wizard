@@ -1,5 +1,5 @@
-import { VWTreeItem } from '@version-wizard/items/vw.tree-item';
 import { ExtensionContext, WorkspaceFolder, commands, window, workspace } from 'vscode';
+import { VWTreeItem } from './items/vw.tree-item';
 import { VWNodeProvider, getPackageManagerList } from './vw-node-provider';
 import { vWQuickPick } from './vw-quickpick';
 
