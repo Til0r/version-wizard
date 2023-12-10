@@ -9,38 +9,42 @@ import {
   window,
   workspace,
 } from 'vscode';
-import { PackageManagerFileListConstant } from './constants/package-manager-file-list.constant';
-import { PackageManagerListConstant } from './constants/package-manager-list.constant';
-import { VWScriptsCommandConstant } from './constants/vw-scripts-command.constant';
-import { VWWorkspaceTreeItem } from './items/vw-workspace.tree-item';
-import { VWTreeItem } from './items/vw.tree-item';
+import { VersionWizardPackageManagerFileConstant } from './constants/vw-package-manager-file-list.constant';
+import { VersionWizardPackageManagerConstant } from './constants/vw-package-manager.constant';
+import { VersionWizardScriptsCommandConstant } from './constants/vw-scripts-command.constant';
+import { VersionWizardWorkspaceTreeItem } from './items/vw-workspace.tree-item';
+import { VersionWizardTreeItem } from './items/vw.tree-item';
 import path = require('path');
 
-export const getPackageManagerList = () => [
-  PackageManagerFileListConstant.PNPM_LOCK,
-  PackageManagerFileListConstant.YARN_LOCK,
-  PackageManagerFileListConstant.PACKAGE_LOCK,
+export const getPackageManagerList = [
+  VersionWizardPackageManagerFileConstant.PNPM_LOCK,
+  VersionWizardPackageManagerFileConstant.YARN_LOCK,
+  VersionWizardPackageManagerFileConstant.PACKAGE_LOCK,
 ];
 
-export class VWNodeProvider implements TreeDataProvider<VWTreeItem | VWWorkspaceTreeItem> {
+export class VersionWizardNodeProvider
+  implements TreeDataProvider<VersionWizardTreeItem | VersionWizardWorkspaceTreeItem>
+{
   private _onDidChangeTreeData: EventEmitter<
-    VWTreeItem | VWWorkspaceTreeItem | undefined | null | void
-  > = new EventEmitter<VWTreeItem | undefined | null | void>();
+    VersionWizardTreeItem | VersionWizardWorkspaceTreeItem | undefined | null | void
+  > = new EventEmitter<VersionWizardTreeItem | undefined | null | void>();
 
-  readonly onDidChangeTreeData: Event<VWTreeItem | VWWorkspaceTreeItem | undefined | null | void> =
-    this._onDidChangeTreeData.event;
+  readonly onDidChangeTreeData: Event<
+    VersionWizardTreeItem | VersionWizardWorkspaceTreeItem | undefined | null | void
+  > = this._onDidChangeTreeData.event;
 
   constructor(private workspaceRoot: string) {}
 
-  getTreeItem = (element: VWTreeItem | VWWorkspaceTreeItem): TreeItem => element;
+  getTreeItem = (element: VersionWizardTreeItem | VersionWizardWorkspaceTreeItem): TreeItem =>
+    element;
 
   refresh(): void {
     this._onDidChangeTreeData.fire(undefined);
   }
 
   getChildren(
-    element?: VWTreeItem | VWWorkspaceTreeItem,
-  ): Thenable<VWTreeItem[] | VWWorkspaceTreeItem[]> {
+    element?: VersionWizardTreeItem | VersionWizardWorkspaceTreeItem,
+  ): Thenable<VersionWizardTreeItem[] | VersionWizardWorkspaceTreeItem[]> {
     return new Promise((resolve) => {
       const folders: WorkspaceFolder[] = workspace.workspaceFolders as WorkspaceFolder[];
 
@@ -49,61 +53,62 @@ export class VWNodeProvider implements TreeDataProvider<VWTreeItem | VWWorkspace
           (o) => o.name === element.label,
         ) as WorkspaceFolder;
 
-        this.getVWTreeItem(resolve, folder.uri.fsPath);
-      } else if (folders && folders.length > 1) this.getVWWorkspaceTreeItem(resolve, folders);
-      else this.getVWTreeItem(resolve, this.workspaceRoot);
+        this.getVersionWizardTreeItem(resolve, folder.uri.fsPath);
+      } else if (folders && folders.length > 1)
+        this.getVersionWizardWorkspaceTreeItem(resolve, folders);
+      else this.getVersionWizardTreeItem(resolve, this.workspaceRoot);
     });
   }
 
-  private getVWTreeItem(
+  private getVersionWizardTreeItem(
     resolve: (
       value:
-        | VWTreeItem[]
-        | VWWorkspaceTreeItem[]
-        | PromiseLike<VWTreeItem[] | VWWorkspaceTreeItem[]>,
+        | VersionWizardTreeItem[]
+        | VersionWizardWorkspaceTreeItem[]
+        | PromiseLike<VersionWizardTreeItem[] | VersionWizardWorkspaceTreeItem[]>,
     ) => void,
     fsPath: string,
   ): void {
     if (
-      getPackageManagerList().some((item) => this.pathExists(path.join(this.workspaceRoot, item)))
+      getPackageManagerList.some((item) => this.pathExists(path.join(this.workspaceRoot, item)))
     ) {
       const packageManager = getPackageManager(fsPath);
 
       resolve([
-        this.getVWTreeItemClass(
+        this.getVersionWizardTreeItemClass(
           fsPath,
-          VWScriptsCommandConstant.PATCH,
-          VWScriptsCommandConstant.PATCH_CMD(packageManager),
+          VersionWizardScriptsCommandConstant.PATCH,
+          VersionWizardScriptsCommandConstant.PATCH_CMD(packageManager),
         ),
-        this.getVWTreeItemClass(
+        this.getVersionWizardTreeItemClass(
           fsPath,
-          VWScriptsCommandConstant.MINOR,
-          VWScriptsCommandConstant.MINOR_CMD(packageManager),
+          VersionWizardScriptsCommandConstant.MINOR,
+          VersionWizardScriptsCommandConstant.MINOR_CMD(packageManager),
         ),
-        this.getVWTreeItemClass(
+        this.getVersionWizardTreeItemClass(
           fsPath,
-          VWScriptsCommandConstant.MAJOR,
-          VWScriptsCommandConstant.MAJOR_CMD(packageManager),
+          VersionWizardScriptsCommandConstant.MAJOR,
+          VersionWizardScriptsCommandConstant.MAJOR_CMD(packageManager),
         ),
-        this.getVWTreeItemClass(
+        this.getVersionWizardTreeItemClass(
           fsPath,
-          VWScriptsCommandConstant.PRERELEASE,
-          VWScriptsCommandConstant.PRERELEASE_CMD(packageManager),
+          VersionWizardScriptsCommandConstant.PRERELEASE,
+          VersionWizardScriptsCommandConstant.PRERELEASE_CMD(packageManager),
         ),
-        this.getVWTreeItemClass(
+        this.getVersionWizardTreeItemClass(
           fsPath,
-          VWScriptsCommandConstant.PREPATCH,
-          VWScriptsCommandConstant.PREPATCH_CMD(packageManager),
+          VersionWizardScriptsCommandConstant.PREPATCH,
+          VersionWizardScriptsCommandConstant.PREPATCH_CMD(packageManager),
         ),
-        this.getVWTreeItemClass(
+        this.getVersionWizardTreeItemClass(
           fsPath,
-          VWScriptsCommandConstant.PREMINOR,
-          VWScriptsCommandConstant.PREMINOR_CMD(packageManager),
+          VersionWizardScriptsCommandConstant.PREMINOR,
+          VersionWizardScriptsCommandConstant.PREMINOR_CMD(packageManager),
         ),
-        this.getVWTreeItemClass(
+        this.getVersionWizardTreeItemClass(
           fsPath,
-          VWScriptsCommandConstant.PREMAJOR,
-          VWScriptsCommandConstant.PREMAJOR_CMD(packageManager),
+          VersionWizardScriptsCommandConstant.PREMAJOR,
+          VersionWizardScriptsCommandConstant.PREMAJOR_CMD(packageManager),
         ),
       ]);
     } else {
@@ -112,36 +117,36 @@ export class VWNodeProvider implements TreeDataProvider<VWTreeItem | VWWorkspace
     }
   }
 
-  private getVWTreeItemClass = (
+  private getVersionWizardTreeItemClass = (
     fsPath: string,
-    label: VWScriptsCommandConstant,
+    label: VersionWizardScriptsCommandConstant,
     command: string,
-  ): VWTreeItem =>
-    new VWTreeItem(
+  ): VersionWizardTreeItem =>
+    new VersionWizardTreeItem(
       label as string,
       TreeItemCollapsibleState.None,
       `${(label as string).includes('pre') ? 'pre' : label}.svg`,
       {
         title: 'Run scripts',
-        command: 'vw.command',
+        command: 'version-wizard.command',
         arguments: [label, fsPath],
       },
       command,
     );
 
-  private getVWWorkspaceTreeItem(
+  private getVersionWizardWorkspaceTreeItem(
     resolve: (
       value:
-        | VWTreeItem[]
-        | VWWorkspaceTreeItem[]
-        | PromiseLike<VWTreeItem[] | VWWorkspaceTreeItem[]>,
+        | VersionWizardTreeItem[]
+        | VersionWizardWorkspaceTreeItem[]
+        | PromiseLike<VersionWizardTreeItem[] | VersionWizardWorkspaceTreeItem[]>,
     ) => void,
     folders: WorkspaceFolder[],
   ): void {
-    const treeItems: VWWorkspaceTreeItem[] = [];
+    const treeItems: VersionWizardWorkspaceTreeItem[] = [];
 
     const folderFiltered = folders.filter((fold) =>
-      getPackageManagerList().some((packageManager) =>
+      getPackageManagerList.some((packageManager) =>
         this.pathExists(path.join(fold.uri.fsPath, packageManager)),
       ),
     );
@@ -149,12 +154,15 @@ export class VWNodeProvider implements TreeDataProvider<VWTreeItem | VWWorkspace
     if (folderFiltered.length) {
       folderFiltered.forEach((folder: WorkspaceFolder): void => {
         const workspaceRoot: string = folder.uri.fsPath;
-        const packageJsonPath = path.join(workspaceRoot, PackageManagerFileListConstant.PACKAGE);
+        const packageJsonPath = path.join(
+          workspaceRoot,
+          VersionWizardPackageManagerFileConstant.PACKAGE,
+        );
 
         const name = folder.name;
         if (this.pathExists(packageJsonPath)) {
           treeItems.push(
-            new VWWorkspaceTreeItem(
+            new VersionWizardWorkspaceTreeItem(
               name,
               TreeItemCollapsibleState.Collapsed,
               `${name} Workspace Folder`,
@@ -180,9 +188,9 @@ export class VWNodeProvider implements TreeDataProvider<VWTreeItem | VWWorkspace
 }
 
 export function getPackageManager(fsPath: string) {
-  if (existsSync(path.join(fsPath, PackageManagerFileListConstant.PNPM_LOCK)))
-    return PackageManagerListConstant.PNPM;
-  else if (existsSync(path.join(fsPath, PackageManagerFileListConstant.YARN_LOCK)))
-    return PackageManagerListConstant.YARN;
-  return PackageManagerListConstant.NPM;
+  if (existsSync(path.join(fsPath, VersionWizardPackageManagerFileConstant.PNPM_LOCK)))
+    return VersionWizardPackageManagerConstant.PNPM;
+  else if (existsSync(path.join(fsPath, VersionWizardPackageManagerFileConstant.YARN_LOCK)))
+    return VersionWizardPackageManagerConstant.YARN;
+  return VersionWizardPackageManagerConstant.NPM;
 }

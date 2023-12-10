@@ -1,38 +1,44 @@
 import { ExtensionContext, WorkspaceFolder, commands, window, workspace } from 'vscode';
-import { VWTreeItem } from './items/vw.tree-item';
-import { VWNodeProvider, getPackageManagerList } from './vw-node-provider';
-import { vWQuickPick } from './vw-quickpick';
+import { VersionWizardTreeItem } from './items/vw.tree-item';
+import { VersionWizardNodeProvider, getPackageManagerList } from './vw-node-provider';
+import { VersionWizardWQuickPick } from './vw-quickpick';
 
 export function activate(context: ExtensionContext) {
   const rootPath = workspace.rootPath || '.';
 
-  const vWNodeProvider = new VWNodeProvider(rootPath);
-  window.registerTreeDataProvider('vw', vWNodeProvider);
+  const versionWizardNodeProvider = new VersionWizardNodeProvider(rootPath);
+  window.registerTreeDataProvider('version-wizard', versionWizardNodeProvider);
 
-  commands.registerCommand('vw.command', (task: VWTreeItem | string, cwd: string) => {
-    if (task instanceof VWTreeItem) commands.executeCommand('vw.openQuickPick', { task, cwd });
-  });
+  commands.registerCommand(
+    'version-wizard.command',
+    (task: VersionWizardTreeItem | string, cwd: string) => {
+      if (task instanceof VersionWizardTreeItem)
+        commands.executeCommand('version-wizard.openQuickPick', { task, cwd });
+    },
+  );
 
-  commands.registerCommand('vw.refresh', () => vWNodeProvider.refresh());
+  commands.registerCommand('version-wizard.refresh', () => versionWizardNodeProvider.refresh());
 
-  commands.registerCommand('vw.openQuickPick', vWQuickPick());
+  commands.registerCommand('version-wizard.openQuickPick', VersionWizardWQuickPick(context));
 
-  if (!workspace.workspaceFolders?.length) initWatchChangeFiles(context, vWNodeProvider, rootPath);
+  if (!workspace.workspaceFolders?.length)
+    initWatchChangeFiles(context, versionWizardNodeProvider, rootPath);
   else
     (workspace.workspaceFolders as WorkspaceFolder[]).forEach((folder) => {
-      initWatchChangeFiles(context, vWNodeProvider, folder.uri.fsPath);
+      initWatchChangeFiles(context, versionWizardNodeProvider, folder.uri.fsPath);
     });
 }
 
 function initWatchChangeFiles(
   context: ExtensionContext,
-  vWNodeProvider: VWNodeProvider,
+  versionWizardNodeProvider: VersionWizardNodeProvider,
   rootPath: string,
 ) {
   const watchChangeFiles = workspace.createFileSystemWatcher(rootPath + '/[^.]*');
 
   const checkIfPackageManagerChanged = (fsPath: string) => {
-    if (getPackageManagerList().some((item) => fsPath.includes(item))) vWNodeProvider.refresh();
+    if (getPackageManagerList.some((item) => fsPath.includes(item)))
+      versionWizardNodeProvider.refresh();
   };
 
   watchChangeFiles.onDidChange((uri) => {

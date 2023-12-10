@@ -1,6 +1,6 @@
 import { Command, ThemeIcon, TreeItem, TreeItemCollapsibleState } from 'vscode';
 
-export class VWWorkspaceTreeItem extends TreeItem {
+export class VersionWizardWorkspaceTreeItem extends TreeItem {
   constructor(
     public readonly label: string,
     public readonly collapsibleState: TreeItemCollapsibleState,

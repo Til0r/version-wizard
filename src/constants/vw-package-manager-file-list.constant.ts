@@ -1,4 +1,4 @@
-export class PackageManagerFileListConstant {
+export class VersionWizardPackageManagerFileConstant {
   public static YARN_LOCK = 'yarn.lock';
   public static PACKAGE = 'package.json';
   public static PNPM_LOCK = 'pnpm-lock.yaml';

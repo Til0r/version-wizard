@@ -36,7 +36,7 @@
     "viewsContainers": {
       "panel": [
         {
-          "id": "vw",
+          "id": "version-wizard",
           "title": "Version Wizard",
           "icon": "resources/icon.svg"
         }
@@ -45,19 +45,19 @@
     "views": {
       "explorer": [
         {
-          "id": "vw",
+          "id": "version-wizard",
           "name": "Version Wizard"
         }
       ]
     },
     "commands": [
       {
-        "command": "vw.command",
+        "command": "version-wizard.command",
         "title": "Run Script",
         "icon": "$(run)"
       },
       {
-        "command": "vw.refresh",
+        "command": "version-wizard.refresh",
         "title": "Refresh",
         "icon": "$(refresh)"
       }
@@ -65,15 +65,15 @@
     "menus": {
       "view/title": [
         {
-          "command": "vw.refresh",
-          "when": "view == vw",
+          "command": "version-wizard.refresh",
+          "when": "view == version-wizard",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "vw.command",
-          "when": "view == vw && viewItem == vWTreeItem",
+          "command": "version-wizard.command",
+          "when": "view == version-wizard && viewItem == versionWizardTreeItem",
           "group": "inline"
         }
       ]
@@ -81,7 +81,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
+    "compile": "tsc -p ./ && auto-changelog",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "compile-tests": "tsc -p . --outDir out",
