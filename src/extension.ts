@@ -1,4 +1,5 @@
 import { ExtensionContext, WorkspaceFolder, commands, window, workspace } from 'vscode';
+import { VersionWizardScriptsCommandConstant } from './constants/vw-scripts-command.constant';
 import { VersionWizardTreeItem } from './items/vw.tree-item';
 import { VersionWizardNodeProvider, getPackageManagerList } from './vw-node-provider';
 import { VersionWizardWQuickPick } from './vw-quickpick';
@@ -18,6 +19,12 @@ export function activate(context: ExtensionContext) {
   );
 
   commands.registerCommand('version-wizard.refresh', () => versionWizardNodeProvider.refresh());
+
+  commands.registerCommand('version-wizard.reset-preid-state', () => {
+    context.globalState.update(`version-wizard.${VersionWizardScriptsCommandConstant.PREID}`, [
+      'rc',
+    ]);
+  });
 
   commands.registerCommand('version-wizard.openQuickPick', VersionWizardWQuickPick(context));
 

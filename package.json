@@ -60,12 +60,22 @@
         "command": "version-wizard.refresh",
         "title": "Refresh",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "version-wizard.reset-preid-state",
+        "title": "Reset Preid List State",
+        "icon": "$(notifications-clear-all)"
       }
     ],
     "menus": {
       "view/title": [
         {
           "command": "version-wizard.refresh",
+          "when": "view == version-wizard",
+          "group": "navigation"
+        },
+        {
+          "command": "version-wizard.reset-preid-state",
           "when": "view == version-wizard",
           "group": "navigation"
         }
