@@ -12,9 +12,9 @@ export class GlobalState<T> {
     this.state = this.context.globalState.get<T[]>(this.stateKey) || defaultValue;
   }
 
-  getState = (): T[] => this.state.filter(Boolean);
+  get = (): T[] => this.state.filter(Boolean);
 
-  updateState(value: T): void {
+  update(value: T): void {
     if (value && !this.state.includes(value))
       this.context.globalState.update(this.stateKey, [...this.state, value]);
   }

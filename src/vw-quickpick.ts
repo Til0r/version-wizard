@@ -97,7 +97,7 @@ export function VersionWizardWQuickPick(context: ExtensionContext) {
       generateQuickPick(
         `Version Wizard (task ~ ${label}): choose preid:`,
         globalStatePreid
-          .getState()
+          .get()
           .map((workspaceItem) => new VersionWizardQuickPickItem(workspaceItem, '')),
         (selectedOption: VersionWizardQuickPickItem) => {
           data = `${data} --${VersionWizardScriptsCommandConstant.PREID}=${selectedOption.label}`;
@@ -129,7 +129,7 @@ function generateQuickPick(
 
   quickPick.onDidAccept(() => {
     const selection = quickPick.activeItems[0];
-    if (globalState) globalState.updateState(selection.label);
+    if (globalState) globalState.update(selection.label);
     action(selection);
     quickPick.hide();
   });
