@@ -13,9 +13,14 @@ export class VersionWizardTreeItem extends TreeItem {
 
     this.description = data;
     this.contextValue = 'versionWizardTreeItem';
-    this.iconPath = {
-      light: path.join(__filename, '..', '..', '..', 'resources', 'light', versionWizardIconPath),
-      dark: path.join(__filename, '..', '..', '..', 'resources', 'dark', versionWizardIconPath),
-    };
+    this.iconPath = path.join(
+      __filename,
+      '..',
+      '..',
+      '..',
+      'resources',
+      'icons',
+      versionWizardIconPath,
+    );
   }
 }

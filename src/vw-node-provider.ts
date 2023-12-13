@@ -125,7 +125,7 @@ export class VersionWizardNodeProvider
     new VersionWizardTreeItem(
       label as string,
       TreeItemCollapsibleState.None,
-      `${(label as string).includes('pre') ? 'pre' : label}.svg`,
+      `${label}.svg`,
       {
         title: 'Run scripts',
         command: 'version-wizard.command',
