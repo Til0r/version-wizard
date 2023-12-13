@@ -14,29 +14,45 @@ Tired of the repetitive task of tagging and manually selecting build scripts for
 
 ## Getting Started
 
-1. Install Version Wizard from the Visual Studio Code Marketplace.
-2. Open your project or workspace in Visual Studio Code.
-3. Navigate to the explorer section and click the play button to initiate the tagging process.
-4. Define and write your build scripts in your project's package.json.
-5. When it's time to build, use the quick pick feature to select the desired script.
+1. **Install Version Wizard**: Visit the Visual Studio Code Marketplace and install Version Wizard to streamline your project management and build process.
+
+2. **Open Your Project or Workspace**: Launch Visual Studio Code and open the project or workspace where you want to implement Version Wizard.
+
+3. **Navigate to Explorer Section**: In Visual Studio Code, head to the explorer section.
+
+4. **Initiate Tagging Process**: Click the play button to initiate the tagging process seamlessly. This step is crucial for Version Wizard to enhance your project management.
+
+5. **Define Build Scripts**: In your project's package.json, define and write your custom build scripts. This empowers you to tailor the build process according to your project's specific needs.
+
+6. **Utilize Quick Pick Feature**: When it's time to build, leverage the quick pick feature provided by Version Wizard. This feature allows you to conveniently select the desired build script, ensuring a smooth and customized build experience.
+
+
 
 ## Demo
 
 ### Generate new tag version with build
 
-![VersioningWithBuild](./resources/readme/tag_version_with_build.gif)
+![Versioning With Build](./resources/readme/tag_version_with_build.gif)
 
 ### Generate new tag version without build
 
-![VersioningWithoutBuild](./resources/readme/tag_version_without_build.gif)
+![Versioning Without Build](./resources/readme/tag_version_without_build.gif)
+
+### Add new preid to history
+
+![Add New Preid and Versioning](./resources/readme/tag_version_preid.gif)
+
+### Remove list preid
+
+![Remove List Preid](./resources/readme/remove_list_preid.png)
 
 ## Installation
 
-You can find Version Wizard on the Visual Studio Code Marketplace [here](https://marketplace.visualstudio.com/items?itemName=til0r.version-wizard).
+You can find Version Wizard on [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=til0r.version-wizard).
 
 ## Contributing
 
-We welcome contributions! If you have ideas or want to improve Version Wizard, please open an issue or submit a pull request.
+We welcome contributions! If you have ideas or want to improve Version Wizard, read [CHANGELOG](CHANGELOG.md)
 
 ## License
 
