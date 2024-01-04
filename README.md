@@ -52,7 +52,7 @@ You can find Version Wizard on [Visual Studio Code Marketplace](https://marketpl
 
 ## Contributing
 
-We welcome contributions! If you have ideas or want to improve Version Wizard, read [CHANGELOG](CHANGELOG.md)
+We welcome contributions! If you have ideas or want to improve Version Wizard, read [CONTRIBUTING](CONTRIBUTING.md)
 
 ## License
 
