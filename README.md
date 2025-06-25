@@ -1,5 +1,11 @@
 # <img src="./resources/icon.png" width="50"> Version Wizard
 
+
+![VS Code Extension](https://img.shields.io/visual-studio-marketplace/v/til0r.version-wizard?label=VSCode%20Marketplace)
+![Downloads](https://img.shields.io/visual-studio-marketplace/d/til0r.version-wizard?color=blue&label=Downloads)
+![License](https://img.shields.io/github/license/til0r/version-wizard)
+
+
 Tired of the repetitive task of tagging and manually selecting build scripts for your projects in Visual Studio Code? Meet Version Wizard, the extension that simplifies project management and gives you full control over your build process.
 
 ## Key Features
