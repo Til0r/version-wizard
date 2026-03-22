@@ -8,8 +8,6 @@ import { getPackageManager } from './vw-node-provider';
 import { GlobalState } from './vw-workspace-state';
 import path = require('path');
 
-const escapeShellPath = (targetPath: string): string => `"${targetPath.replace(/(["\\$`])/g, '\\$1')}"`;
-
 export function VersionWizardWQuickPick(context: ExtensionContext) {
   return function ({ task, cwd }: { task: VersionWizardTreeItem; cwd: string }) {
     const fsPath = task.command?.arguments?.at(1);
@@ -35,8 +33,6 @@ export function VersionWizardWQuickPick(context: ExtensionContext) {
       else terminal = window.createTerminal({ cwd: workspaceCwd, name });
 
       terminal.show();
-
-      terminal.sendText(`cd ${escapeShellPath(workspaceCwd)}`);
 
       terminal.sendText(`${data} ${VersionWizardScriptsCommandConstant.NO_GIT_TAG_VERSION}`);
 
