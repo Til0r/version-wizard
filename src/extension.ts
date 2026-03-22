@@ -1,4 +1,4 @@
-import { ExtensionContext, WorkspaceFolder, commands, window, workspace } from 'vscode';
+import { ExtensionContext, TreeItemCollapsibleState, WorkspaceFolder, commands, window, workspace } from 'vscode';
 import { VersionWizardScriptsCommandConstant } from './constants/vw-scripts-command.constant';
 import { VersionWizardTreeItem } from './items/vw.tree-item';
 import {
@@ -30,11 +30,18 @@ export function activate(context: ExtensionContext) {
       }
 
       if (typeof task === 'string' && cwd) {
-        const syntheticTask = new VersionWizardTreeItem(task, 0, `${task}.svg`, {
+        const command = getCommandFromLabel(task, cwd);
+
+        if (!command) {
+          window.showErrorMessage(`Unknown version task: "${task}".`);
+          return;
+        }
+
+        const syntheticTask = new VersionWizardTreeItem(task, TreeItemCollapsibleState.None, `${task}.svg`, {
           title: 'Run scripts',
           command: 'version-wizard.command',
           arguments: [task, cwd],
-        }, getCommandFromLabel(task, cwd));
+        }, command);
 
         commands.executeCommand('version-wizard.openQuickPick', {
           task: syntheticTask,

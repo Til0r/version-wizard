@@ -27,7 +27,7 @@ export class VersionWizardNodeProvider
 {
   private readonly _onDidChangeTreeData: EventEmitter<
     VersionWizardTreeItem | VersionWizardWorkspaceTreeItem | undefined | null | void
-  > = new EventEmitter<VersionWizardTreeItem | undefined | null | void>();
+  > = new EventEmitter<VersionWizardTreeItem | VersionWizardWorkspaceTreeItem | undefined | null | void>();
 
   readonly onDidChangeTreeData: Event<
     VersionWizardTreeItem | VersionWizardWorkspaceTreeItem | undefined | null | void
