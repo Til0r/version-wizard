@@ -1,4 +1,4 @@
-import { readFile } from 'fs';
+import { readFile } from 'node:fs/promises';
 import { ExtensionContext, Terminal, window } from 'vscode';
 import { VersionWizardPackageManagerFileConstant } from './constants/vw-package-manager-file-list.constant';
 import { VersionWizardScriptsCommandConstant } from './constants/vw-scripts-command.constant';
@@ -8,35 +8,46 @@ import { getPackageManager } from './vw-node-provider';
 import { GlobalState } from './vw-workspace-state';
 import path = require('path');
 
+const escapeShellPath = (targetPath: string): string => `"${targetPath.replace(/(["\\$`])/g, '\\$1')}"`;
+
 export function VersionWizardWQuickPick(context: ExtensionContext) {
   return function ({ task, cwd }: { task: VersionWizardTreeItem; cwd: string }) {
-    const fsPath = (task as VersionWizardTreeItem).command?.arguments?.at(1);
+    const fsPath = task.command?.arguments?.at(1);
+
+    if (!fsPath || typeof fsPath !== 'string') {
+      window.showErrorMessage('Unable to resolve the target workspace folder.');
+      return;
+    }
+
+    const workspaceCwd = cwd || fsPath;
 
     let data = task.data || '';
     const label = task.label;
 
     const runScripts = function (scriptBuild = '') {
-      const name: string = `${path.basename(fsPath)} ~ ${label}`;
+      const name: string = `${label} ~ ${fsPath}`;
 
       let terminal: Terminal;
 
       const terminalAlreadyCreated = window.terminals.find((item) => item.name === name);
 
       if (terminalAlreadyCreated) terminal = terminalAlreadyCreated;
-      else terminal = window.createTerminal({ cwd, name });
+      else terminal = window.createTerminal({ cwd: workspaceCwd, name });
 
       terminal.show();
+
+      terminal.sendText(`cd ${escapeShellPath(workspaceCwd)}`);
 
       terminal.sendText(`${data} ${VersionWizardScriptsCommandConstant.NO_GIT_TAG_VERSION}`);
 
       setTimeout(() => {
         getDataFromPackageJson(fsPath).then((packageJson) => {
           const version = packageJson.version;
+          const buildCommand = scriptBuild ? `${getPackageManager(fsPath)} run ${scriptBuild} && ` : '';
 
           terminal.sendText(
-            `${scriptBuild ? `${getPackageManager(fsPath)} run ${scriptBuild} &&` : ''} ${
-              VersionWizardScriptsCommandConstant.ADD_ALL
-            } && ${VersionWizardScriptsCommandConstant.COMMIT_TAG(
+            `${buildCommand}${VersionWizardScriptsCommandConstant.ADD_ALL} && ${
+              VersionWizardScriptsCommandConstant.COMMIT_TAG(
               version,
             )} && ${VersionWizardScriptsCommandConstant.CREATE_TAG(
               version,
@@ -129,6 +140,8 @@ function generateQuickPick(
 
   quickPick.onDidAccept(() => {
     const selection = quickPick.activeItems[0];
+    if (!selection) return;
+
     if (globalState) globalState.update(selection.label);
     action(selection);
     quickPick.hide();
@@ -141,12 +154,7 @@ function generateQuickPick(
 function getDataFromPackageJson(
   cwd: string,
 ): Promise<{ scripts: Record<string, string>; version: string }> {
-  return new Promise((resolve, reject) => {
-    const packageJsonPath = path.join(cwd, VersionWizardPackageManagerFileConstant.PACKAGE);
+  const packageJsonPath = path.join(cwd, VersionWizardPackageManagerFileConstant.PACKAGE);
 
-    readFile(packageJsonPath, 'utf8', (err, data) => {
-      if (err) reject(err);
-      resolve(JSON.parse(data));
-    });
-  });
+  return readFile(packageJsonPath, 'utf8').then((data) => JSON.parse(data));
 }

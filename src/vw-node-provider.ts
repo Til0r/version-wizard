@@ -1,4 +1,4 @@
-import { accessSync, existsSync } from 'fs';
+import { existsSync } from 'node:fs';
 import {
   Event,
   EventEmitter,
@@ -25,7 +25,7 @@ export const getPackageManagerList = [
 export class VersionWizardNodeProvider
   implements TreeDataProvider<VersionWizardTreeItem | VersionWizardWorkspaceTreeItem>
 {
-  private _onDidChangeTreeData: EventEmitter<
+  private readonly _onDidChangeTreeData: EventEmitter<
     VersionWizardTreeItem | VersionWizardWorkspaceTreeItem | undefined | null | void
   > = new EventEmitter<VersionWizardTreeItem | undefined | null | void>();
 
@@ -33,7 +33,7 @@ export class VersionWizardNodeProvider
     VersionWizardTreeItem | VersionWizardWorkspaceTreeItem | undefined | null | void
   > = this._onDidChangeTreeData.event;
 
-  constructor(private workspaceRoot: string) {}
+  constructor(private readonly workspaceRoot: string) {}
 
   getTreeItem = (element: VersionWizardTreeItem | VersionWizardWorkspaceTreeItem): TreeItem =>
     element;
@@ -69,9 +69,7 @@ export class VersionWizardNodeProvider
     ) => void,
     fsPath: string,
   ): void {
-    if (
-      getPackageManagerList.some((item) => this.pathExists(path.join(this.workspaceRoot, item)))
-    ) {
+    if (getPackageManagerList.some((item) => this.pathExists(path.join(fsPath, item)))) {
       const packageManager = getPackageManager(fsPath);
 
       resolve([
@@ -119,11 +117,11 @@ export class VersionWizardNodeProvider
 
   private getVersionWizardTreeItemClass = (
     fsPath: string,
-    label: VersionWizardScriptsCommandConstant,
+    label: string,
     command: string,
   ): VersionWizardTreeItem =>
     new VersionWizardTreeItem(
-      label as string,
+      label,
       TreeItemCollapsibleState.None,
       `${label}.svg`,
       {
@@ -178,12 +176,7 @@ export class VersionWizardNodeProvider
   }
 
   private pathExists(p: string): boolean {
-    try {
-      accessSync(p);
-    } catch (err) {
-      return false;
-    }
-    return true;
+    return existsSync(p);
   }
 }
 
