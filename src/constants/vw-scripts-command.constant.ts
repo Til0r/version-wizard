@@ -35,5 +35,15 @@ export class VersionWizardScriptsCommandConstant {
   public static NO_GIT_TAG_VERSION = '--no-git-tag-version';
   public static CREATE_TAG = (version: string) => `git tag ${version}`;
   public static PUSH_TAG = (version: string) => `git push origin ${version}`;
-  public static COMMIT_TAG = (version: string) => `git commit -am 'New version ${version}'`;
+  public static COMMIT_TAG = (version: string) =>
+    `sh -c 'LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || true); ` +
+    `if [ -n "$LAST_TAG" ]; then ` +
+    `COMMIT_HISTORY=$(git log --pretty=format:"- %s" "$LAST_TAG"..HEAD); ` +
+    `HISTORY_TITLE="Recap since $LAST_TAG"; ` +
+    `else ` +
+    `COMMIT_HISTORY=$(git log --pretty=format:"- %s"); ` +
+    `HISTORY_TITLE="Recap since first commit"; ` +
+    `fi; ` +
+    `if [ -z "$COMMIT_HISTORY" ]; then COMMIT_HISTORY="- No code changes since last tag."; fi; ` +
+    `git commit --allow-empty -m "feat: Release new version ${version}" -m "$HISTORY_TITLE" -m "$COMMIT_HISTORY"'`;
 }
